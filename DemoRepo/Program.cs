@@ -66,6 +66,8 @@ if (foundProduct != null)
     productRepository.DeleteProduct(foundProduct.Id);
 
     productRepository.GetAllProducts().ToList().ForEach(p => Console.WriteLine(p.ToString()));
+
+    Console.WriteLine($"C'est fini !");
 }
 else
 {
