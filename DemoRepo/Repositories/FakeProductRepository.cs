@@ -60,7 +60,7 @@ namespace DemoRepo.Repositories
                 case ActionEnum.Update:
                     throw new NotImplementedException("Update action is not implemented in this method.");
                 case ActionEnum.Delete:
-                    throw new NotImplementedException("Delete action is not implemented in this method.");
+                    throw new NotImplementedException("Delete action is not implemented in this method");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
