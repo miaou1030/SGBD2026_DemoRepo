@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DemoRepo.Repositories
 {
-    class FakeProductRepository : IProductRepository
+    public class FakeProductRepository : IProductRepository
     {
         private readonly List<Product> _products = new()
         {
@@ -46,6 +46,24 @@ namespace DemoRepo.Repositories
             _products.Remove(existingProduct);
             _products.Add(product);
             return true;
+        }
+
+        void IProductRepository.ActionOnProduct(ActionEnum action)
+        {
+            switch(action)
+            {
+                case ActionEnum.GetAll:
+                    ((IProductRepository)this).GetAllProducts();
+                    break;
+                case ActionEnum.Add:
+                    throw new NotImplementedException("Add action is not implemented in this method.");
+                case ActionEnum.Update:
+                    throw new NotImplementedException("Update action is not implemented in this method.");
+                case ActionEnum.Delete:
+                    throw new NotImplementedException("Delete action is not implemented in this method.");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
+            }
         }
     }
 }

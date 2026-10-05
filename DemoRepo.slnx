@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="DemoRepo/DemoRepo.csproj" />
+  <Project Path="TestProjectDemo/TestProjectDemo.csproj" Id="cf95790f-3ba7-4092-9b47-aeac2cb1a087" />
 </Solution>
