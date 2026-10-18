@@ -12,10 +12,15 @@ namespace DemoRepo.Repositories
         private SqlConnection _connection;
         //private IDbConnection dbConnection;
 
-        public AdoNetProductRepository()
+        public AdoNetProductRepository(string? connectionString)
         {
             // Initialize your database connection here if needed
-            _connection = new SqlConnection("Server=OUSSAMA\\SQL2026;Database=SGBD2026;Integrated Security=True;TrustServerCertificate=True;");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentException("Connection string cannot be null or empty.", nameof(connectionString));
+            }
+
+            _connection = new SqlConnection(connectionString);
         }
 
         int IProductRepository.AddProduct(Product product)
