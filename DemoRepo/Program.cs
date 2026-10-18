@@ -1,5 +1,6 @@
 ﻿using DemoRepo.Models;
 using DemoRepo.Repositories;
+using Microsoft.Extensions.Configuration;
 
 Console.WriteLine("Hello, World!");
 
@@ -13,11 +14,24 @@ Product product = new Product
 Console.WriteLine(product.ToString());
 
 
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
+
 //IProductRepository productRepository = new FakeProductRepository();
 //IProductRepository productRepository = new AdoNetProductRepository();
-string connectionString = "Server=OUSSAMA\\SQL2026;Database=SGBD2026;Integrated Security=True;TrustServerCertificate=True;";
+//string connectionString = "Server=OUSSAMA\\SQL2026;Database=SGBD2026;Integrated Security=True;TrustServerCertificate=True;";
 //IProductRepository productRepository = ProductRepoFactory.CreateProductRepository(RepositoryType.Fake);
-IProductRepository productRepository = ProductRepoFactory.CreateProductRepository(RepositoryType.AdoNet, connectionString);
+//IProductRepository productRepository = ProductRepoFactory.CreateProductRepository(RepositoryType.AdoNet, connectionString);
+
+string? connectionString = configuration.GetConnectionString("DefaultConnection");
+string repositoryTypeString = configuration.GetSection("Repository:Type").Value ?? throw new InvalidOperationException("Repository type not found.");
+
+RepositoryType repositoryType = Enum.Parse<RepositoryType>(repositoryTypeString, ignoreCase: true);
+
+IProductRepository productRepository = ProductRepoFactory.CreateProductRepository(repositoryType, connectionString);
 
 productRepository.GetAllProducts().ToList().ForEach(p => Console.WriteLine(p.ToString()));
 
