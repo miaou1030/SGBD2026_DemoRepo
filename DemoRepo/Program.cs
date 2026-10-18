@@ -13,9 +13,10 @@ Product product = new Product
 Console.WriteLine(product.ToString());
 
 
-IProductRepository productRepository = new FakeProductRepository();
+//IProductRepository productRepository = new FakeProductRepository();
+IProductRepository productRepository = new AdoNetProductRepository();
 
-productRepository.GetAllProducts().ToList().ForEach(p => Console.WriteLine(p.ToString()));
+//productRepository.GetAllProducts().ToList().ForEach(p => Console.WriteLine(p.ToString()));
 
 IEnumerable<Product> products = productRepository.GetAllProducts();
 foreach (var p in products)
