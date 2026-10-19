@@ -10,11 +10,9 @@ namespace DemoRepo.Repositories
     public class AdoNetProductRepository : IProductRepository
     {
         private SqlConnection _connection;
-        //private IDbConnection dbConnection;
 
         public AdoNetProductRepository(string? connectionString)
         {
-            // Initialize your database connection here if needed
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentException("Connection string cannot be null or empty.", nameof(connectionString));
@@ -23,18 +21,44 @@ namespace DemoRepo.Repositories
             _connection = new SqlConnection(connectionString);
         }
 
+        string LoadFileFromAssembly(string fileName)
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+            var manifestResourceNames = assembly.GetManifestResourceNames();
+
+            string? resourceName = manifestResourceNames
+                .FirstOrDefault(name => name.EndsWith(fileName, StringComparison.OrdinalIgnoreCase));
+
+            if (resourceName is null)
+            {
+                throw new FileNotFoundException(
+                    $"Ressource '{fileName}' introuvable. Vérifie que le fichier est en 'Ressource incorporée'.");
+            }
+
+            using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream is null)
+            {
+                throw new FileNotFoundException($"Impossible d'ouvrir la ressource '{resourceName}'.");
+            }
+
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
+        }
+
         int IProductRepository.AddProduct(Product product)
         {
-            var command = new SqlCommand("INSERT INTO Products (Name, Price) OUTPUT INSERTED.Id VALUES (@Name, @Price)", _connection);
+            string sql = LoadFileFromAssembly("AddProduct.sql");
+            
+            var command = new SqlCommand(sql, _connection);
             
             command.CommandType = CommandType.Text;
-            
             command.Parameters.AddWithValue("@Name", product.Name);
             command.Parameters.AddWithValue("@Price", product.Price);
 
             _connection.Open();
 
-            int newProductId = (int)command.ExecuteScalar();
+            int newProductId = (int)command.ExecuteScalar(); // probleme
             
             _connection.Close();
 
@@ -43,31 +67,30 @@ namespace DemoRepo.Repositories
 
         bool IProductRepository.DeleteProduct(int productId)
         {
-            var command = new SqlCommand("DELETE FROM Products WHERE Id = @Id", _connection);
-            command.CommandType = CommandType.Text;
-
+            //var sql = LoadFileFromAssembly("DeleteProduct.sql");
+            var command = new SqlCommand("Product_Delete", _connection);
+            
+            command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("@Id", productId);
 
             _connection.Open();
-
-            if (command.ExecuteNonQuery() > 0)
+            try
+            {
+                return command.ExecuteNonQuery() > 0;
+            }
+            finally
             {
                 _connection.Close();
-                return true;
             }
-
-            command.ExecuteNonQuery();
-
-            _connection.Close();
-
-            return true;
         }
 
         IEnumerable<Product> IProductRepository.GetAllProducts()
         {
             var products = new List<Product>();
             
-            var command = new SqlCommand("SELECT Id, Name, Price FROM Products", _connection);
+            var sql = LoadFileFromAssembly("GetAllProducts.sql");
+
+            var command = new SqlCommand(sql, _connection);
             command.CommandType = CommandType.Text;
 
             _connection.Open();
@@ -95,7 +118,8 @@ namespace DemoRepo.Repositories
         {
             Product? product = null;
 
-            var command = new SqlCommand("SELECT Id, Name, Price FROM Products WHERE Id = @Id", _connection);
+            var sql = LoadFileFromAssembly("GetProductById.sql");
+            var command = new SqlCommand(sql, _connection);
             
             command.CommandType = CommandType.Text;
             command.Parameters.AddWithValue("@Id", productId);
