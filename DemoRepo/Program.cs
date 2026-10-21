@@ -33,7 +33,34 @@ RepositoryType repositoryType = Enum.Parse<RepositoryType>(repositoryTypeString,
 
 IProductRepository productRepository = ProductRepoFactory.CreateProductRepository(repositoryType, connectionString);
 
+IManagerRepository managerRepository = ManagerRepoFactory.CreateManagerRepository(repositoryType, connectionString);
+
+Console.WriteLine("--- Managers ---");
+managerRepository.GetAllManagers().ToList().ForEach(m => Console.WriteLine(m));
+
+// Ajout (prénom null : autorisé)
+int newManagerId = managerRepository.AddManager(new Manager { MNG_FirstName = null, MNG_LastName = "ConsoleDemo" });
+Console.WriteLine($"Manager ajouté, Id : {newManagerId}");
+
+// Recherche par Id
+Manager? foundManager = managerRepository.GetManagerById(newManagerId);
+Console.WriteLine(foundManager?.ToString() ?? "Manager introuvable.");
+
+if (foundManager != null)
+{
+    // Mise à jour
+    foundManager.MNG_FirstName = "Demo";
+    Console.WriteLine($"Mise à jour : {managerRepository.UpdateManager(foundManager)}");
+    Console.WriteLine(managerRepository.GetManagerById(newManagerId));
+
+    // Suppression
+    Console.WriteLine($"Suppression : {managerRepository.DeleteManager(newManagerId)}");
+}
+
+Console.WriteLine("--- Fin Managers ---");
+
 productRepository.GetAllProducts().ToList().ForEach(p => Console.WriteLine(p.ToString()));
+
 
 IEnumerable<Product> products = productRepository.GetAllProducts();
 
@@ -93,3 +120,6 @@ else
 {
     Console.WriteLine("Failed to add product.");
 }
+
+//******* Partie Manager *********
+
