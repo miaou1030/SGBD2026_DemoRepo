@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Repositories\SQL\DeleteManager.sql" />
+    <EmbeddedResource Include="Repositories\SQL\GetManagerById.sql" />
+    <EmbeddedResource Include="Repositories\SQL\GetAllManagers.sql" />
+    <EmbeddedResource Include="Repositories\SQL\AddManager.sql" />
     <EmbeddedResource Include="Repositories\SQL\GetProductById.sql" />
     <EmbeddedResource Include="Repositories\SQL\GetAllProducts.sql" />
     <EmbeddedResource Include="Repositories\SQL\DeleteProduct.sql" />
@@ -19,6 +23,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.13" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.24.2-preview.1" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup>

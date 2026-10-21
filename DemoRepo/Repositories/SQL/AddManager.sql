@@ -1,0 +1,1 @@
+﻿INSERT INTO Manager (MNG_FirstName, MNG_LastName) OUTPUT INSERTED.MNG_Id VALUES (@MNG_FirstName, @MNG_LastName)
