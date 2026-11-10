@@ -1,0 +1,1 @@
+﻿DELETE FROM Manager WHERE MNG_Id = @MNG_Id
