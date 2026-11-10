@@ -1,4 +1,8 @@
 <Solution>
   <Project Path="DemoRepo/DemoRepo.csproj" />
+  <Project Path="Sample.API/Sample.API.csproj" Id="38d2ae0d-77ac-4752-9859-f67c87a1b3f7" />
+  <Project Path="Sample.Application/Sample.Application.csproj" Id="c188b6f6-890a-42fe-afdc-891e5d8f50a8" />
+  <Project Path="Sample.Domain/Sample.Domain.csproj" Id="5924bc41-6572-4761-8cca-9a0abfa81bc3" />
+  <Project Path="Sample.Infrastructure/Sample.Infrastructure.csproj" Id="5d28ef4d-495e-4e1b-a28f-60f6d2078b5e" />
   <Project Path="TestProjectDemo/TestProjectDemo.csproj" Id="cf95790f-3ba7-4092-9b47-aeac2cb1a087" />
 </Solution>

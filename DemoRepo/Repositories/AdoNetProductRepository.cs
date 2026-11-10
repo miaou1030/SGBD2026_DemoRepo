@@ -21,6 +21,7 @@ namespace DemoRepo.Repositories
             _connection = new SqlConnection(connectionString);
         }
 
+        // ancienne version de LoadFileFromAssembly ici (revenu temp)
         string LoadFileFromAssembly(string fileName)
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();

@@ -1,0 +1,1 @@
+﻿SELECT MNG_Id, MNG_FirstName, MNG_LastName FROM Manager ORDER BY MNG_Id
